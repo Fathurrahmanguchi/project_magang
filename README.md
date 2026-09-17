@@ -1,6 +1,6 @@
-# Sistem Pencarian Kode Barang Inventaris — BKPAD Kota Bekasi
+# Sistem Pencarian Kode Barang Inventaris — BPKAD Kota Bekasi
 
-Aplikasi web modern untuk pencarian dan penelusuran Kode Barang Milik Daerah (BMD) di lingkungan Badan Pengelola Keuangan dan Aset Daerah (BKPAD) Pemerintah Kota Bekasi. Aplikasi ini dirancang untuk memudahkan aparatur sipil negara dan pengelola aset dalam mengidentifikasi kodefikasi barang inventaris secara cepat, akurat, dan terstruktur.
+Aplikasi web modern untuk pencarian dan penelusuran Kode Barang Milik Daerah (BMD) di lingkungan Badan Pengelolaan Keuangan dan Aset Daerah (BPKAD) Kota Bekasi. Aplikasi ini dirancang untuk memudahkan aparatur sipil negara dan pengelola aset dalam mengidentifikasi kodefikasi barang inventaris secara cepat, akurat, dan terstruktur.
 
 ---
 
@@ -73,7 +73,7 @@ Sistem ini membantu pengelolaan aset daerah dengan menyediakan mesin pencari kod
 ## Project Structure
 
 ```text
-bkpad-inventaris/
+project_magang/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml             # Pipeline CI/CD GitHub Actions
@@ -133,8 +133,8 @@ Jika ingin menjalankan manual tanpa Docker:
 Kloning repositori ini ke komputer lokal Anda:
 
 ```bash
-git clone <URL_REPOSITORY>
-cd bkpad-inventaris
+git clone https://github.com/Fathurrahmanguchi/project_magang.git
+cd project_magang
 ```
 
 ---
