@@ -1,0 +1,19 @@
+{
+  "name": "bkpad-inventaris",
+  "version": "1.0.0",
+  "description": "Aplikasi web untuk mencari kode barang milik daerah (BMD) berdasarkan nama barang atau kode barang, lengkap dengan autocomplete dan filter kategori.",
+  "main": "index.js",
+  "scripts": {
+    "migrate": "node database/migrate.js",
+    "seed": "node database/seed.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "csv-parse": "^7.0.2",
+    "dotenv": "^17.4.2",
+    "pg": "^8.22.0"
+  }
+}
