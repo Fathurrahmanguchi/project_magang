@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
-import SearchBar from './components/SearchBar';
+import InventorySearchBarV0 from './components/InventorySearchBarV0';
 import CategoryCards from './components/CategoryCards';
 import ResultTable from './components/ResultTable';
 import DetailModal from './components/DetailModal';
@@ -108,7 +108,7 @@ export default function App() {
             administrasi inventaris daerah.
           </p>
 
-          <SearchBar
+          <InventorySearchBarV0
             query={query}
             setQuery={setQuery}
             onSearchSubmit={handleSearchSubmit}
