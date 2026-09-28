@@ -25,42 +25,51 @@ Aplikasi web modern untuk pencarian dan penelusuran Kode Barang Milik Daerah (BM
 
 ## Project Overview
 
-Sistem ini membantu pengelolaan aset daerah dengan menyediakan mesin pencari kode barang inventaris standar pemerintah. Berdasarkan master data inventaris (`data/kode_barang.csv`), sistem memetakan hierarki kode 7 tingkat (Golongan, Bidang, Kelompok, Sub Kelompok, hingga Rincian Objek) serta menyediakan antarmuka responsif yang memudahkan pencarian bahkan dengan kata kunci tidak baku maupun singkatan populer.
+Sistem ini membantu pengelolaan aset daerah dengan menyediakan mesin pencari kode barang inventaris standar pemerintah. Berdasarkan master data inventaris (`data/kode_barang.csv`), sistem memetakan hierarki kode 7 tingkat (Golongan, Bidang, Kelompok, Sub Kelompok, hingga Rincian Objek) serta menyediakan antarmuka responsif untuk membantu pengguna menemukan kode barang berdasarkan nama atau kode barang.
 
 ---
 
 ## Main Features
 
-1. **Pencarian Cepat & Autocomplete**:
-   - Menampilkan saran pencarian instan saat pengguna mengetik nama atau kode barang.
-   - Menggunakan pencarian berbasis teks penuh (*full-text/fuzzy search*) dengan ekstensi PostgreSQL `pg_trgm`.
+1. **Redesigned Search Bar**:
+   - Tampilan search bar modern dengan struktur input, toolbar, dan tombol pencarian yang lebih terintegrasi.
+   - Input menggunakan textarea yang dapat menyesuaikan tinggi secara otomatis saat teks bertambah.
+   - Pencarian dapat dijalankan dengan tombol atau menekan **Enter**.
 
-2. **Mesin Sinonim Cerdas (*Synonym Matching*)**:
-   - Mampu mengenali istilah umum dan singkatan teknis (contoh: pencarian `pc`, `pc unit`, `laptop`, `komputer`, `ac`, `pendingin ruangan`, `printer`, dll.) dan menempatkan hasil paling relevan di urutan teratas.
+2. **Autocomplete Pencarian**:
+   - Menampilkan saran barang berdasarkan input pengguna dengan debounce 250 ms.
+   - Saran menampilkan nama barang dan kode barang untuk membantu pengguna memilih hasil yang sesuai.
+   - Dropdown autocomplete dapat ditutup dengan klik di luar area search bar.
 
-3. **Hierarki Klasifikasi Aset Lengkap**:
-   - Menampilkan struktur pohon klasifikasi barang: Golongan → Bidang → Kelompok → Sub Kelompok → Rincian Objek.
-   - Menyajikan informasi kode induk (*parent*) dan sub-kode turunan (*children*).
+3. **Pencarian Cepat**:
+   - Menyediakan quick-search chips untuk beberapa jenis barang yang sering dicari, seperti **Komputer, Notebook, Printer, Kursi Lipat,** dan **Meja Sekolah**.
+   - Chip dapat langsung menjalankan pencarian tanpa perlu mengetik ulang kata kunci.
 
-4. **Kategori Populer Aset Daerah (KIB)**:
-   - Kartu akses cepat untuk kelompok aset utama seperti Peralatan & Mesin, Gedung & Bangunan, Tanah, Jalan/Jaringan, dan Aset Lainnya.
+4. **Filter Kategori Inventaris**:
+   - Menyediakan akses kategori inventaris daerah melalui antarmuka pencarian.
+   - Kategori digunakan untuk membantu mempersempit hasil pencarian berdasarkan kelompok aset.
 
-5. **Modal Detail Interaktif**:
-   - Menampilkan spesifikasi lengkap kode barang, status aktif, satuan, serta daftar sub-kode barang di bawahnya.
+5. **Hierarki Klasifikasi Aset**:
+   - Menampilkan struktur klasifikasi barang berdasarkan hierarki kode barang.
+   - Informasi kode induk dan sub-kode dapat ditampilkan pada detail barang.
 
-6. **Quick Copy Kode Barang**:
-   - Tombol salin satu klik untuk menyalin format kodefikasi standar ke clipboard, dilengkapi animasi toast notification.
+6. **Modal Detail Interaktif**:
+   - Menampilkan informasi detail kode barang beserta informasi terkait dari database.
 
-7. **Paginasi Data Efisien**:
-   - Navigasi halaman cepat dengan batas penampilan data optimal untuk kenyamanan pengguna.
+7. **Quick Copy Kode Barang**:
+   - Tombol salin satu klik untuk membantu menyalin kode barang.
+
+8. **Paginasi Data**:
+   - Hasil pencarian ditampilkan secara bertahap dengan pagination agar data lebih mudah dinavigasi.
 
 ---
+
 
 ## Technology Stack
 
 | Layer | Komponen / Teknologi | Keterangan |
 | :--- | :--- | :--- |
-| **Frontend** | React 18, Vite 5 | SPA responsif dengan Vanilla CSS modern |
+| **Frontend** | React 18, Vite 5, Lucide React | SPA responsif dengan komponen pencarian interaktif |
 | **Backend** | Node.js 20, Express 4 | RESTful API arsitektur modular (Service-Controller) |
 | **Database** | PostgreSQL 16 (Alpine) | Database relasional dengan ekstensi `pg_trgm` |
 | **Web Server / Proxy** | Nginx (Alpine) | Reverse proxy untuk melayani static build dan meneruskan `/api/` |
@@ -98,7 +107,7 @@ project_magang/
 │   └── seed.js                # Skrip parsing data CSV dan database seeder
 ├── frontend/
 │   ├── src/
-│   │   ├── components/        # Komponen UI (Navbar, SearchBar, CategoryCards, ResultTable, DetailModal)
+│   │   ├── components/        # Komponen UI (Navbar, InventorySearchBarV0, CategoryCards, ResultTable, DetailModal)
 │   │   ├── api.js             # Klien fetch API
 │   │   ├── App.jsx            # Komponen root aplikasi & manajemen state
 │   │   ├── main.jsx           # Entry point React
@@ -230,7 +239,7 @@ Backend menyediakan endpoint RESTful API berbasis JSON:
 | :--- | :--- | :--- | :--- |
 | `GET` | `/api/health` | - | Mengembalikan status kesehatan layanan backend |
 | `GET` | `/api/kategori` | - | Mengambil seluruh daftar kategori inventaris |
-| `GET` | `/api/kode-barang` | `q` (string)<br>`kategori_id` (int)<br>`page` (int, default: 1)<br>`limit` (int, default: 20) | Mencari kode barang dengan pencarian teks, sinonim, filter kategori, dan paginasi |
+| `GET` | `/api/kode-barang` | `q` (string)<br>`kategori_id` (int)<br>`page` (int, default: 1)<br>`limit` (int, default: 20) | Mencari kode barang berdasarkan kata kunci, sinonim, filter kategori, dan paginasi |
 | `GET` | `/api/kode-barang/:kode` | `:kode` (kodefikasi barang, mis. `1.3.2.05.01.03.001`) | Mengambil detail spesifikasi kode barang beserta daftar kode anak (*sub-codes*) |
 
 #### Contoh Request:
